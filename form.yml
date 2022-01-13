@@ -13,8 +13,9 @@ attributes:
       - ["3.4", "3.4.1"]
 
   working_dir:
+    widget: "file_navigator"
     label: "Working Directory"
-    data-filepicker: true
-    data-target-file-type: dirs  # Valid values are: files, dirs, or both
-    readonly: false
-    help: "Select your project directory; defaults to $HOME"
+    id: "folder_name"
+#   data-target-file-type: dirs  # Valid values are: files, dirs, or both
+#    readonly: false
+    help: "Select your project directory; defaults to your home directory on the server."
