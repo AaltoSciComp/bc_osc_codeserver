@@ -22,7 +22,7 @@ export PASSWORD="$password"
 echo "$(date): Running on compute node ${compute_node}:$port"
 
 # VSCode complains that Centos7 git is too old. Use newer from modules
-module load vscode git
+module load vscode/code-server-3.2.0 git
 
 CPP_FILE="<%= working_dir.to_s %>/.vscode/c_cpp_properties.json"
 
