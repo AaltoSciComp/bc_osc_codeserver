@@ -1,0 +1,68 @@
+---
+title: "VScode"
+cluster: "triton"
+form:
+  - num_cores
+  - memtask
+  - bc_num_hours
+  - advanced
+  - triton_partition
+  - working_dir
+  - bc_vnc_resolution
+  - bc_email_on_started
+attributes:
+  bc_email_on_started: 0
+  triton_partition:
+    label: "Partition"
+    widget: select
+    options: 
+      - [ "interactive", "interactive" ]
+      - [ "batch", "batch" ]
+    help: |
+      Default is interactive
+    wrapper:
+      class: "advanced"
+  num_cores:
+    widget: "number_field"
+    label: "Number of cores"
+    value: 1
+    help: |
+      Maximum of 2 cores is allowed
+    min: 1
+    max: 2
+    step: 1
+  bc_num_hours:
+    value: 4
+    min: 4
+    step: 1
+    max: 24
+    help: |
+      Maximum time is 24h for interactive partition
+      <hr />
+      <h2>Settings:</h2>
+  bc_vnc_resolution:
+    required: true
+  version: "vscode"
+  memtask:
+    widget: "select"
+    label: "Total memory reserved"
+    value: "default"
+    options: 
+      - [ "4 GB", "4G" ]
+      - [ "8 GB", "8G" ]
+      - [ "10 GB", "10G" ]
+    help: |
+      Start from the smallest of 4GB and increase only if needed.
+  advanced:
+    label: "Enable advanced settings"
+    widget: check_box
+    value: "0"
+  working_dir:
+    label: "Working Directory"
+    data-filepicker: true
+    data-target-file-type: dirs  # Valid values are: files, dirs, or both
+    readonly: false
+    help: "Select your project directory; defaults to $HOME"
+    wrapper:
+      class: "advanced"
+    

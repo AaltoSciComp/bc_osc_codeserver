@@ -1,3 +1,14 @@
 ---
 batch_connect:
   template: "basic"
+script:
+  native:
+    - "-N"
+    - "1"
+    - "-n"
+    - "<%= num_cores %>"
+    - "--mem"
+    - "<%= memtask %>"
+    - "-p"
+    - "<%= triton_partition %>"
+

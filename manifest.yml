@@ -1,12 +1,10 @@
 ---
 name: Code Server
-category: Interactive Apps
+category: Applications
 subcategory: Servers
 role: batch_connect
 description: |
-  This app will launch a [VS Code] server using [Code Server] on the [Pitzer
-  cluster].
+  This app will launch a [VS Code] on the [Triton cluster].
 
   [VS Code]: https://code.visualstudio.com/
-  [Code Server]: https://coder.com/
-  [Pitzer cluster]: https://www.osc.edu/resources/technical_support/supercomputers/pitzer
+  [Triton cluster]: https://scicomp.aalto.fi/

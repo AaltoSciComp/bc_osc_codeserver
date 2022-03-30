@@ -1,3 +1,84 @@
+$(document).ready(function () {
+  // Checkboxes dont support setting wrapper class
+  const user_sites_checkbox = $("#batch_connect_session_context_python_user_site");
+  user_sites_checkbox.parent().parent().addClass("advanced");
+
+  const venv_checkbox = $("#batch_connect_session_context_enable_venv");
+  venv_checkbox.parent().parent().addClass("advanced");
+
+  const show_advanced = $("#batch_connect_session_context_advanced");
+
+  show_advanced.change(update_advanced);
+  venv_checkbox.change(update_advanced);
+  user_sites_checkbox.change(update_advanced);
+  update_advanced();
+
+  //const venv = $("#batch_connect_session_context_venv");
+  //venv.change(validate_venv);
+  //venv_checkbox.change(validate_venv);
+});
+
+function update_advanced() {
+  const show_advanced = $("#batch_connect_session_context_advanced");
+
+  const show = show_advanced.prop("checked");
+
+  update_visibility(".advanced", show);
+
+  //const venv = $("#batch_connect_session_context_enable_venv").prop("checked");
+  //update_visibility(".venv", show && venv);
+
+  //const user_packages_enabled = $("#batch_connect_session_context_python_user_site").prop("checked");
+  //update_visibility(".user_packages_field", show && user_packages_enabled);
+
+}
+
+function update_visibility(selector, show) {
+  const fields = $(selector);
+  fields.each( function () {
+    $(this).toggle(!!show);
+  });
+
+}
+
+function validate_venv() {
+  const venv = $("#batch_connect_session_context_venv");
+  const venv_enabled = $("#batch_connect_session_context_enable_venv").prop("checked");
+  if (!venv_enabled) {
+    venv[0].setCustomValidity("");
+    venv[0].reportValidity();
+    return;
+  }
+  if (venv.length) {
+    check_venv(venv.val(),
+      () => {
+        venv[0].setCustomValidity("");
+        venv[0].reportValidity();
+      },
+      () => {
+        venv[0].setCustomValidity("Directory does not seem to be a valid virtual environment, a new virtual environment will be created")
+        venv[0].reportValidity();
+      }
+    );
+  }
+}
+
+function check_venv(venv, callback_valid, callback_invalid) {
+  const basePath = "/pun/sys/dashboard/files/fs";
+  const file = (`${basePath}${venv}/bin/activate`);
+  $.get(file)
+    .done(function(data, statusText, xhr) {
+      const valid = data.includes("# This file must be used with \"source bin/activate\"");
+      if (valid) {
+        callback_valid();
+      }
+      else {
+        callback_invalid();
+      }
+    })
+    .fail(callback_invalid);
+
+}
 !function(t){var e={};function n(r){if(e[r])return e[r].exports;var o=e[r]={i:r,l:!1,exports:{}};return t[r].call(o.exports,o,o.exports,n),o.l=!0,o.exports}n.m=t,n.c=e,n.d=function(t,e,r){n.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:r})},n.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},n.t=function(t,e){if(1&e&&(t=n(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var o in t)n.d(r,o,function(e){return t[e]}.bind(null,o));return r},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="",n(n.s=10)}([function(t,e,n){(function(t){function n(t,e){for(var n=0,r=t.length-1;r>=0;r--){var o=t[r];"."===o?t.splice(r,1):".."===o?(t.splice(r,1),n++):n&&(t.splice(r,1),n--)}if(e)for(;n--;n)t.unshift("..");return t}function r(t,e){if(t.filter)return t.filter(e);for(var n=[],r=0;r<t.length;r++)e(t[r],r,t)&&n.push(t[r]);return n}e.resolve=function(){for(var e="",o=!1,i=arguments.length-1;i>=-1&&!o;i--){var a=i>=0?arguments[i]:t.cwd();if("string"!=typeof a)throw new TypeError("Arguments to path.resolve must be strings");a&&(e=a+"/"+e,o="/"===a.charAt(0))}return(o?"/":"")+(e=n(r(e.split("/"),(function(t){return!!t})),!o).join("/"))||"."},e.normalize=function(t){var i=e.isAbsolute(t),a="/"===o(t,-1);return(t=n(r(t.split("/"),(function(t){return!!t})),!i).join("/"))||i||(t="."),t&&a&&(t+="/"),(i?"/":"")+t},e.isAbsolute=function(t){return"/"===t.charAt(0)},e.join=function(){var t=Array.prototype.slice.call(arguments,0);return e.normalize(r(t,(function(t,e){if("string"!=typeof t)throw new TypeError("Arguments to path.join must be strings");return t})).join("/"))},e.relative=function(t,n){function r(t){for(var e=0;e<t.length&&""===t[e];e++);for(var n=t.length-1;n>=0&&""===t[n];n--);return e>n?[]:t.slice(e,n-e+1)}t=e.resolve(t).substr(1),n=e.resolve(n).substr(1);for(var o=r(t.split("/")),i=r(n.split("/")),a=Math.min(o.length,i.length),s=a,c=0;c<a;c++)if(o[c]!==i[c]){s=c;break}var l=[];for(c=s;c<o.length;c++)l.push("..");return(l=l.concat(i.slice(s))).join("/")},e.sep="/",e.delimiter=":",e.dirname=function(t){if("string"!=typeof t&&(t+=""),0===t.length)return".";for(var e=t.charCodeAt(0),n=47===e,r=-1,o=!0,i=t.length-1;i>=1;--i)if(47===(e=t.charCodeAt(i))){if(!o){r=i;break}}else o=!1;return-1===r?n?"/":".":n&&1===r?"/":t.slice(0,r)},e.basename=function(t,e){var n=function(t){"string"!=typeof t&&(t+="");var e,n=0,r=-1,o=!0;for(e=t.length-1;e>=0;--e)if(47===t.charCodeAt(e)){if(!o){n=e+1;break}}else-1===r&&(o=!1,r=e+1);return-1===r?"":t.slice(n,r)}(t);return e&&n.substr(-1*e.length)===e&&(n=n.substr(0,n.length-e.length)),n},e.extname=function(t){"string"!=typeof t&&(t+="");for(var e=-1,n=0,r=-1,o=!0,i=0,a=t.length-1;a>=0;--a){var s=t.charCodeAt(a);if(47!==s)-1===r&&(o=!1,r=a+1),46===s?-1===e?e=a:1!==i&&(i=1):-1!==e&&(i=-1);else if(!o){n=a+1;break}}return-1===e||-1===r||0===i||1===i&&e===r-1&&e===n+1?"":t.slice(e,r)};var o="b"==="ab".substr(-1)?function(t,e,n){return t.substr(e,n)}:function(t,e,n){return e<0&&(e=t.length+e),t.substr(e,n)}}).call(this,n(3))},function(t,e){function n(t){return(n="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}var r;r=function(){return this}();try{r=r||new Function("return this")()}catch(t){"object"===("undefined"==typeof window?"undefined":n(window))&&(r=window)}t.exports=r},function(t,e,n){"use strict";(function(t,n){function r(t){return(r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}
 /*!
  * Vue.js v2.6.14
