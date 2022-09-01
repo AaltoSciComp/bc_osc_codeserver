@@ -1,7 +1,6 @@
 ---
 name: Code Server
 category: Applications
-subcategory: Servers
 role: batch_connect
 description: |
   This app will launch a [VS Code] on the [Triton cluster].
